@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  labels:
+    nginx: nginx-dns
+  name: nginx-dns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      task: two
+  template:
+    metadata:
+      labels:
+        task: two
+    spec:
+      containers:
+      - name: nginx-dns
+        image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-dns
+  labels:
+    name: nginx-dns
+spec:
+  type: ExternalName
+  externalName: example.com
+  ports:
+  - port: 80
+    protocol: TCP
